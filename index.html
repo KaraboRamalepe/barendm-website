@@ -11,14 +11,18 @@
 
 <body>
 
-    <!-- Header -->
     <header>
         <div class="container nav">
+
+            <button class="menu-toggle" id="menuToggle">
+                &#9776;
+            </button>
+
             <div class="logo">
                 <img src="public/logo.png" alt="Barend M">
             </div>
 
-            <nav>
+            <nav id="mobileMenu">
                 <a href="#home">Home</a>
                 <a href="#about">About</a>
                 <a href="#products">Products</a>
@@ -26,7 +30,8 @@
                 <a href="#contact">Contact</a>
             </nav>
 
-            <a href="#" class="btn">Request Quote</a>
+            <a href="#contact" class="btn">Request Quote</a>
+
         </div>
     </header>
 
@@ -49,8 +54,8 @@
                 </p>
 
                 <div class="hero-buttons">
-                    <a href="#" class="btn">Request a Quote</a>
-                    <a href="#" class="btn-outline">Browse Products</a>
+                    <a href="#contact" class="btn">Request a Quote</a>
+                    <a href="#products" class="btn-outline">Browse Products</a>
                 </div>
             </div>
 
@@ -156,7 +161,7 @@
         </div>
     </section>
 
-    
+
     <section id="why-us" class="why-us">
         <div class="container">
 
@@ -253,31 +258,39 @@
     </section>
 
     <section id="contact" class="contact">
-
         <div class="container">
 
             <h2>Get In Touch</h2>
+            <p>Request a quote and we’ll get back to you shortly.</p>
+<!-- 
+            <form id="quoteForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" class="contact-form">
 
-            <form>
+                <label>Company Name</label>
+                <input type="text" name="company" placeholder="Company Name" required>
 
-                <input type="text" placeholder="Company Name" required>
+                <label>Contact Person</label>
+                <div class="form-grid">
+                    <input type="text" name="first_name" placeholder="First Name" required>
+                    <input type="text" name="last_name" placeholder="Last Name" required>
+                </div>
 
-                <input type="text" placeholder="Contact Person" required>
+                <label>Email Address</label>
+                <input type="email" name="email" placeholder="Email Address" required>
 
-                <input type="email" placeholder="Email Address" required>
+                <label>Phone Number</label>
+                <input type="tel" name="phone" placeholder="Phone Number">
 
-                <input type="tel" placeholder="Phone Number">
+                <label>Message</label>
+                <textarea name="message" placeholder="Tell us what products you need"></textarea>
 
-                <textarea placeholder="Tell us what products you need"></textarea>
+                <button type="submit" class="btn">Submit Enquiry</button>
 
-                <button type="submit" class="btn">
-                    Submit Enquiry
-                </button>
+            </form> -->
+            <div id="loader" class="loader"></div>
 
-            </form>
-
+            <script src="https://www.cognitoforms.com/f/seamless.js" data-key="7vQVLWDd4EqMnKrQS-SXzA"
+                data-form="1"></script>
         </div>
-
     </section>
 
     <footer>
@@ -296,11 +309,11 @@
                 <h4>Quick Links</h4>
 
                 <ul>
-                    <li><a href="home">Home</a></li>
-                    <li><a href="about">About</a></li>
-                    <li><a href="products">Products</a></li>
-                    <li><a href="services">Services</a></li>
-                    <li><a href="contact">Contact</a></li>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#why-us">Services</a></li>
+                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </div>
 
@@ -319,8 +332,8 @@
 
     </footer>
 
-    <a href="https://wa.me/2780460002?text=Hi%20I%20would%20like%20a%20quote%20for%20your%20services"
-        class="whatsapp-float" target="_blank">
+    <a href="https://wa.me/27780460002?text=Hi%20I%20would%20like%20a%20quote%20for%20your%20services"
+        class="whatsapp-float" target="_blank" rel="noopener noreferrer">
 
         <span class="wa-icon">💬</span>
         <span class="wa-text">Get Quote</span>
@@ -330,72 +343,101 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
 
+            /* ================= IMAGE SLIDER ================= */
+
             const slider = document.querySelector(".about-image-slider");
-            if (!slider) return;
 
-            const slides = slider.querySelectorAll(".slide");
-            const nextBtn = slider.querySelector(".next");
-            const prevBtn = slider.querySelector(".prev");
-            const dotsContainer = slider.querySelector(".dots");
+            if (slider) {
 
-            let index = 0;
-            let autoPlay = null;
+                const slides = slider.querySelectorAll(".slide");
+                const nextBtn = slider.querySelector(".next");
+                const prevBtn = slider.querySelector(".prev");
+                const dotsContainer = slider.querySelector(".dots");
 
-            /* ================= DOTS ================= */
-            slides.forEach((_, i) => {
-                const dot = document.createElement("span");
-                dot.addEventListener("click", () => goToSlide(i));
-                dotsContainer.appendChild(dot);
-            });
+                let index = 0;
+                let autoPlay;
 
-            const dots = dotsContainer.querySelectorAll("span");
-
-            /* ================= UPDATE ================= */
-            function updateSlider() {
-                slides.forEach((slide, i) => {
-                    slide.classList.toggle("active", i === index);
+                // create dots
+                slides.forEach((_, i) => {
+                    const dot = document.createElement("span");
+                    dot.addEventListener("click", () => {
+                        index = i;
+                        updateSlider();
+                    });
+                    dotsContainer.appendChild(dot);
                 });
 
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle("active", i === index);
+                const dots = dotsContainer.querySelectorAll("span");
+
+                function updateSlider() {
+                    slides.forEach((slide, i) => {
+                        slide.classList.toggle("active", i === index);
+                    });
+
+                    dots.forEach((dot, i) => {
+                        dot.classList.toggle("active", i === index);
+                    });
+                }
+
+                function nextSlide() {
+                    index = (index + 1) % slides.length;
+                    updateSlider();
+                }
+
+                function prevSlide() {
+                    index = (index - 1 + slides.length) % slides.length;
+                    updateSlider();
+                }
+
+                nextBtn?.addEventListener("click", nextSlide);
+                prevBtn?.addEventListener("click", prevSlide);
+
+                function startAutoPlay() {
+                    autoPlay = setInterval(nextSlide, 4000);
+                }
+
+                function stopAutoPlay() {
+                    clearInterval(autoPlay);
+                }
+
+                slider.addEventListener("mouseenter", stopAutoPlay);
+                slider.addEventListener("mouseleave", startAutoPlay);
+
+                updateSlider();
+                startAutoPlay();
+            }
+
+            /* ================= MOBILE MENU ================= */
+
+            const menuToggle = document.getElementById("menuToggle");
+            const mobileMenu = document.getElementById("mobileMenu");
+
+            if (menuToggle && mobileMenu) {
+
+                menuToggle.addEventListener("click", () => {
+                    mobileMenu.classList.toggle("active");
+                });
+
+                mobileMenu.querySelectorAll("a").forEach(link => {
+                    link.addEventListener("click", () => {
+                        mobileMenu.classList.remove("active");
+                    });
                 });
             }
 
-            function goToSlide(i) {
-                index = i;
-                updateSlider();
+            /* ================= COGNITO LOADER ================= */
+
+            const loader = document.getElementById("loader");
+
+            if (loader) {
+                loader.style.display = "block";
+
+                window.addEventListener("load", () => {
+                    setTimeout(() => {
+                        loader.style.display = "none";
+                    }, 1200);
+                });
             }
-
-            function nextSlide() {
-                index = (index + 1) % slides.length;
-                updateSlider();
-            }
-
-            function prevSlide() {
-                index = (index - 1 + slides.length) % slides.length;
-                updateSlider();
-            }
-
-            /* ================= CONTROLS ================= */
-            if (nextBtn) nextBtn.addEventListener("click", nextSlide);
-            if (prevBtn) prevBtn.addEventListener("click", prevSlide);
-
-            /* ================= AUTOPLAY ================= */
-            function startAutoPlay() {
-                stopAutoPlay();
-                autoPlay = setInterval(nextSlide, 4000);
-            }
-
-            function stopAutoPlay() {
-                if (autoPlay) clearInterval(autoPlay);
-            }
-
-            slider.addEventListener("mouseenter", stopAutoPlay);
-            slider.addEventListener("mouseleave", startAutoPlay);
-
-            /* ================= INIT ================= */
-            updateSlider();
-            startAutoPlay();
 
         });
     </script>

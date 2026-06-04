@@ -35,6 +35,7 @@ header {
     box-shadow: 0 2px 10px rgba(0,0,0,.05);
     position: sticky;
     top: 0;
+    z-index: 9999; /* add this */
 }
 
 .nav {
@@ -212,8 +213,86 @@ nav a:active {
 .about,
 .why-us,
 .industries,
+/* ================= CONTACT SECTION ================= */
 .contact {
     padding: 100px 0;
+    background: var(--light);
+    text-align: center;
+}
+
+.contact h2 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.contact p {
+    color: var(--gray);
+    margin-bottom: 40px;
+}
+
+/* ================= FORM CONTAINER ================= */
+.contact-form {
+    max-width: 750px;
+    margin: auto;
+    text-align: left; /* IMPORTANT FIX */
+}
+
+/* LABELS */
+.contact-form label {
+    display: block;
+    margin: 18px 0 8px;
+    font-weight: 600;
+    color: var(--black);
+}
+
+/* INPUTS + TEXTAREA */
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s ease;
+}
+
+/* FOCUS STATE */
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(178,150,90,0.15);
+}
+
+/* TEXTAREA */
+.contact-form textarea {
+    min-height: 150px;
+    resize: none;
+}
+
+/* ================= GRID (FIRST + LAST NAME) ================= */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+/* ================= BUTTON ================= */
+.contact-form .btn {
+    width: 50%;
+    margin-top: 20px;
+    position:center;
+}
+
+/* ================= MOBILE FIX ================= */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contact {
+        padding: 60px 20px;
+    }
 }
 
 .about-content {
@@ -228,19 +307,27 @@ nav a:active {
 }
 
 /* ================= ONLY ONE SLIDER (FIXED) ================= */
+.about-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 320px;
+}
 .about-image-slider {
     position: relative;
     width: 320px;
     height: 320px;
+    flex-shrink: 0;
     margin: auto;
     border-radius: 50%;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,.15);
 }
 
-/* images */
 .about-image-slider .slide {
     position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -248,11 +335,9 @@ nav a:active {
     transition: opacity 0.8s ease;
 }
 
-/* active image */
 .about-image-slider .slide.active {
     opacity: 1;
 }
-
 /* buttons */
 .about-image-slider button {
     position: absolute;
@@ -578,10 +663,16 @@ footer ul {
     }
 
     /* ABOUT IMAGE */
-    .about-image-slider {
-        width: 260px;
-        height: 260px;
-    }
+   .about-image-slider {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 1 / 1;
+    margin: auto;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,.15);
+}
 
     /* WHY GRID */
     .why-grid {
@@ -645,4 +736,76 @@ footer ul {
         grid-template-columns: 1fr;
         text-align: center;
     }
+}
+/* ================= MOBILE NAVIGATION ================= */
+
+/* Hide hamburger on desktop */
+.menu-toggle {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    .nav {
+        display: grid;
+        grid-template-columns: 50px 1fr 50px;
+        align-items: center;
+        position: relative;
+    }
+
+    .menu-toggle {
+        display: block;
+        grid-column: 1;
+        justify-self: start;
+        font-size: 2rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--black);
+        z-index: 1001;
+    }
+
+    .logo {
+        grid-column: 2;
+        text-align: center;
+    }
+
+    .logo img {
+        height: 55px;
+    }
+
+    .nav .btn {
+        display: none;
+    }
+
+    nav {
+        position: absolute;
+        top: 85px;
+        left: 0;
+        width: 100%;
+        background: white;
+        display: none;
+        flex-direction: column;
+        box-shadow: 0 10px 25px rgba(0,0,0,.1);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    nav.active {
+        display: flex;
+    }
+}
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 5px solid #eee;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
